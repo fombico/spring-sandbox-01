@@ -1,16 +1,14 @@
 package com.example.demo.aop;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Aspect
 @Component
 public class HelloControllerAspect {
-
-    private Logger Logger = LoggerFactory.getLogger(HelloControllerAspect.class);
 
     private int executionCount = 0;
 
@@ -24,12 +22,12 @@ public class HelloControllerAspect {
 
     @Around(value = "helloPC(name)", argNames = "proceedingJoinPoint,name")
     public Object aroundHello(ProceedingJoinPoint proceedingJoinPoint, String name) throws Throwable {
-        Logger.info(String.format("===> Hello, %s!", name));
+        log.info(String.format("===> Hello, %s!", name));
 
         Object object = proceedingJoinPoint.proceed();
         executionCount++;
 
-        Logger.info(String.format("===> Execution count: %d", executionCount));
+        log.info(String.format("===> Execution count: %d", executionCount));
 
         return object;
     }
@@ -42,9 +40,9 @@ public class HelloControllerAspect {
 
     @Around(value = "execution(* HelloController.hello(String)) && args(name)", argNames = "proceedingJoinPoint,name")
     public Object aroundHelloAgain(ProceedingJoinPoint proceedingJoinPoint, String name) throws Throwable {
-        Logger.info(String.format("==> Hello again, %s!", name));
+        log.info(String.format("==> Hello again, %s!", name));
         Object object = proceedingJoinPoint.proceed();
-        Logger.info("==> Goodbye again");
+        log.info("==> Goodbye again");
         return object;
     }
 
@@ -57,21 +55,21 @@ public class HelloControllerAspect {
 
     @Before("teapotPC()")
     public void beforeTeapot() {
-        Logger.info("==> Before teapot");
+        log.info("==> Before teapot");
     }
 
     @After("teapotPC()")
     public void afterTeapot() {
-        Logger.info("==> Executes regardless of result");
+        log.info("==> Executes regardless of result");
     }
 
     @AfterReturning("teapotPC()")
     public void afterReturningTeapot() {
-        Logger.info("==> Executes after success");
+        log.info("==> Executes after success");
     }
 
     @AfterThrowing("teapotPC()")
     public void afterThrowingError() {
-        Logger.info("==> Teapot was thrown");
+        log.info("==> Teapot was thrown");
     }
 }
