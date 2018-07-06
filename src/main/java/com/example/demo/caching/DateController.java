@@ -14,7 +14,7 @@ public class DateController {
     @GetMapping("/what/day")
     public String getDayOfWeek() {
         System.out.println("Getting day of week");
-        return LocalDate.now().plusDays(1).getDayOfWeek().toString();
+        return LocalDate.now().getDayOfWeek().toString();
     }
 
     @Cacheable(cacheNames = "myCache", key = "'year'")
